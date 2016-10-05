@@ -24,7 +24,15 @@ public class CameraManager : MonoBehaviour
 	public Vector2 Position
 	{
 		get { return new Vector2(transform.position.x, transform.position.z); }
-		set { transform.position = new Vector3(value.x, 0, value.y); }
+		set
+		{
+			if (limit.width * limit.height > 0)
+			{
+				value.x = Mathf.Clamp(value.x, limit.xMin, limit.xMax);
+				value.y = Mathf.Clamp(value.y, limit.yMin, limit.yMax);
+			}
+			transform.position = new Vector3(value.x, 0, value.y);
+		}
 	}
 
 	public float Rotation
@@ -46,11 +54,15 @@ public class CameraManager : MonoBehaviour
 	public float maxShift;
 	public AnimationCurve shiftCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
+	[Header("Limit")]
+	public Rect limit;
+
 	[Header("Animation")]
 	public AnimationCurve zoomCurve = AnimationCurve.Linear(0, 0, 1, 1);
 	public AnimationCurve moveCurve = AnimationCurve.Linear(0, 0, 1, 1);
 	public AnimationCurve rotateCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
+	[SerializeField, Range(0, 1)]
 	private float zoom;
 	private Transform transform;
 	private IEnumerator zoomRoutine;
@@ -63,6 +75,8 @@ public class CameraManager : MonoBehaviour
 		Instance = this;
 
 		transform = GetComponent<Transform>();
+
+		Zoom = zoom;
 	}
 
 
