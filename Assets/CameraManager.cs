@@ -16,8 +16,8 @@ public class CameraManager : MonoBehaviour
 			float shift = Mathf.Lerp(maxShift, minShift, shiftCurve.Evaluate(zoom));
 			float angle = Mathf.Atan2(height, shift) * Mathf.Rad2Deg;
 
-			camera.localPosition = new Vector3(0, height, -shift);
-			camera.localEulerAngles = new Vector3(angle, 0, 0);
+			target.localPosition = new Vector3(0, height, -shift);
+			target.localEulerAngles = new Vector3(angle, 0, 0);
 		}
 	}
 
@@ -42,7 +42,7 @@ public class CameraManager : MonoBehaviour
 	}
 
 	[SerializeField]
-	private Transform camera;
+	private Transform target;
 
 	[Header("Height")]
 	public float minHeight;
@@ -64,7 +64,6 @@ public class CameraManager : MonoBehaviour
 
 	[SerializeField, Range(0, 1)]
 	private float zoom;
-	private Transform transform;
 	private IEnumerator zoomRoutine;
 	private IEnumerator moveRoutine;
 	private IEnumerator rotateRoutine;
@@ -73,9 +72,6 @@ public class CameraManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-
-		transform = GetComponent<Transform>();
-
 		Zoom = zoom;
 	}
 
